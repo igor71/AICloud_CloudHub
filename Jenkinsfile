@@ -25,7 +25,7 @@ pipeline {
 	       sh 'docker build -f Dockerfile.GM-tf-2.7 -t gm-tf-2.7:0.0 .'  
             }
         }
-	stage('Test The yi/caffe:cpu-tf Docker Image') { 
+	stage('Test The gm-tf-2.7:0.0 Docker Image') { 
             steps {
                 sh '''#!/bin/bash -xe
 		   echo 'Hello, Jenkins_Docker'
