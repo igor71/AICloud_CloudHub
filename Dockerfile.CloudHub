@@ -41,7 +41,7 @@ RUN apt-get install -y --no-install-recommends \
     software-properties-common \
     build-essential \
     python-pip \
-	python-dev \
+    python-dev \
     python-setuptools \
     curl \
     wget \
@@ -98,7 +98,7 @@ RUN curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
 
 RUN pip --no-cache-dir install \
     ipykernel \
-	pandas \
+    pandas \
     Flask_SocketIO==2.9.6 \
     Flask_Cors==3.0.3 \
     Flask==0.12.2 \
