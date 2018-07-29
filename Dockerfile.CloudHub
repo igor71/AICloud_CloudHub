@@ -37,7 +37,7 @@ ENV LANGUAGE en_US.UTF-8
 #     Very basic installations                  #
 #################################################
 
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     software-properties-common \
     build-essential \
     python-pip \
