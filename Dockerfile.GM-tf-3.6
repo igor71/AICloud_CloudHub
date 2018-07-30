@@ -51,6 +51,33 @@ RUN apt-get update && \
     pv && \
     dpkg-reconfigure -f noninteractive tzdata
     
+   
+#################################################
+#     Python 3.6 installations for dev          #
+#################################################
+
+RUN add-apt-repository ppa:jonathonf/python-3.6 && \
+    apt-get update && apt-get install -y --no-install-recommends \
+    python3.6 \
+    python3.6-dev \
+    python3.6-venv \
+    && \ 
+    apt-get clean && \ 
+    rm -rf /var/lib/apt/lists/*
+	
+RUN ln -s /usr/bin/python3.6 /usr/local/bin/python3 && \
+    ln -s /usr/local/bin/pip /usr/local/bin/pip3 && \
+    ln -s /usr/bin/python3.6 /usr/local/bin/python 
+    
+    
+################################	
+# Updating PIP and Dependences #
+################################
+
+RUN curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
+    python3.6 get-pip.py && \
+    rm get-pip.py
+    
     	
 #################################################
 #             Tensorflow Dependences            #
@@ -61,27 +88,19 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get -q install -y -o Dpkg::Options::="-
     libfreetype6-dev \
     libpng12-dev \
     libzmq3-dev \
+    libgoogle-perftools-dev \
     pkg-config \
-    python-dev \
+    python3-dev \
     zlib1g-dev && \  
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 	
-	
-################################	
-# Updating PIP and Dependences #
-################################
-
-RUN curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
-    python get-pip.py && \
-    rm get-pip.py
-
-		
+			
 #################################################
 #     Python Installations                      #
 #################################################
 
-RUN python -m pip --no-cache-dir install \
+RUN python3.6 -m pip --no-cache-dir install \
     ipykernel \ 
     h5py \
     scipy \
@@ -154,7 +173,7 @@ RUN chmod -R 777 /home/dev
 # Install TensorFlow GPU version. #
 ###################################
   RUN cd /
-  ARG TFLOW=tensorflow-1.8.0-cp27-cp27mu-linux_x86_64.whl
+  ARG TFLOW=tensorflow-1.8.0-cp36-cp36m-linux_x86_64.whl
   ARG CRED="server:123server123"
   RUN  curl -u ${CRED} ftp://yifileserver/DOCKER_IMAGES/Tensorflow/Current/${TFLOW} -o ${TFLOW} && \
        pip --no-cache-dir install ${TFLOW} && \
