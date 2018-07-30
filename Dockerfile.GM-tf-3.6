@@ -2,7 +2,6 @@ FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
 
 MAINTAINER Igor Rabkin <igor.rabkin@xiaoyi.com>
 
-
 ################################################
 #     Basic desktop environment                #
 ################################################
@@ -22,6 +21,34 @@ ENV LANGUAGE en_US.UTF-8
 
 ENV TZ=Asia/Jerusalem
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+
+#################################################
+#     Python 3.6 installations for dev          #
+#################################################
+
+RUN add-apt-repository ppa:jonathonf/python-3.6 && \
+    apt-get update && apt-get install -y --no-install-recommends \
+    python3.6 \
+    python3.6-dev \
+    python3.6-venv \
+    && \ 
+    apt-get clean && \ 
+    rm -rf /var/lib/apt/lists/*
+	
+RUN ln -s /usr/bin/python3.6 /usr/local/bin/python3 && \
+    ln -s /usr/local/bin/pip /usr/local/bin/pip3 && \
+    ln -s /usr/bin/python3.6 /usr/local/bin/python 
+    
+    
+################################	
+# Updating PIP and Dependences #
+################################
+
+RUN curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
+    python3.6 get-pip.py && \
+    rm get-pip.py
+
 
 #################################################
 #     Very basic installations                  #
@@ -50,33 +77,6 @@ RUN apt-get update && \
     screen \
     pv && \
     dpkg-reconfigure -f noninteractive tzdata
-    
-   
-#################################################
-#     Python 3.6 installations for dev          #
-#################################################
-
-RUN add-apt-repository ppa:jonathonf/python-3.6 && \
-    apt-get update && apt-get install -y --no-install-recommends \
-    python3.6 \
-    python3.6-dev \
-    python3.6-venv \
-    && \ 
-    apt-get clean && \ 
-    rm -rf /var/lib/apt/lists/*
-	
-RUN ln -s /usr/bin/python3.6 /usr/local/bin/python3 && \
-    ln -s /usr/local/bin/pip /usr/local/bin/pip3 && \
-    ln -s /usr/bin/python3.6 /usr/local/bin/python 
-    
-    
-################################	
-# Updating PIP and Dependences #
-################################
-
-RUN curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
-    python3.6 get-pip.py && \
-    rm get-pip.py
     
     	
 #################################################
