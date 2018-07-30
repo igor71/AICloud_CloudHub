@@ -16,6 +16,35 @@ ENV LANGUAGE en_US.UTF-8
 
 
 #################################################
+#     Very basic installations                  #
+#################################################
+
+RUN apt-get update && \
+    DEBIAN_FRONTEND="noninteractive" apt-get -q install -y -o Dpkg::Options::="--force-confnew" --no-install-recommends \
+    build-essential \
+    software-properties-common \
+    ffmpeg \
+    curl \
+    wget \
+    git \
+    htop \
+    iputils-ping \
+    rsync \
+    cifs-utils \
+    zip \
+    unzip \
+    tree \
+    nano \
+    tzdata \
+    mlocate \
+    sudo \
+    sshpass \
+    screen \
+    pv && \
+    dpkg-reconfigure -f noninteractive tzdata
+
+
+#################################################
 #          Set Time Zone Asia/Jerusalem         #
 ################################################# 
 
@@ -49,36 +78,7 @@ RUN curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
     python3.6 get-pip.py && \
     rm get-pip.py
 
-
-#################################################
-#     Very basic installations                  #
-#################################################
-
-RUN apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get -q install -y -o Dpkg::Options::="--force-confnew" --no-install-recommends \
-    build-essential \
-    software-properties-common \
-    ffmpeg \
-    curl \
-    wget \
-    git \
-    htop \
-    iputils-ping \
-    rsync \
-    cifs-utils \
-    zip \
-    unzip \
-    tree \
-    nano \
-    tzdata \
-    mlocate \
-    sudo \
-    sshpass \
-    screen \
-    pv && \
-    dpkg-reconfigure -f noninteractive tzdata
-    
-    	
+   	
 #################################################
 #             Tensorflow Dependences            #
 #################################################
