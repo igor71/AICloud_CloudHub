@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build The gm-tf-3.6:0.0  Docker Image') {
             steps {
-	              sh 'docker build -f Dockerfile.GM-tf-3.6 -t gm-tf-3.6:0.0 .'  
+	              sh 'docker build --no-cache -f Dockerfile.GM-tf-3.6 -t gm-tf-3.6:0.0 .'  
             }
         }
 	      stage('Test gm-tf-3.6:0.0 Image') { 
