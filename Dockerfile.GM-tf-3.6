@@ -165,7 +165,7 @@ RUN useradd -m -d /home/xiaoyi -s /bin/bash xiaoyi && \
 # Add the users to sudoers group
 RUN echo "xiaoyi  ALL=(ALL)  NOPASSWD: ALL" >> /etc/sudoers
     
-# Set full permission for jenkins folder
+# Set full permission for dev user home folder
 RUN chmod -R 777 /home/dev
 
 		
