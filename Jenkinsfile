@@ -1,17 +1,17 @@
 pipeline {
   agent {label 'gm-cloud-hub'}
     stages {
-        stage('Build cloud-hub:0.0 Docker Image') {
+        stage('Build The gm-tf-3.6:0.0  Docker Image') {
             steps {
-	       sh 'docker build -f Dockerfile.CloudHub -t cloud-hub:0.0 .'  
+	              sh 'docker build -f Dockerfile.GM-tf-3.6 -t gm-tf-3.6:0.0 .'  
             }
         }
-	stage('Test The cloud-hub:0.0 Docker Image') { 
+	      stage('Test gm-tf-3.6:0.0 Image') { 
             steps {
                 sh '''#!/bin/bash -xe
-		    echo 'Hello, YI-TFLOW!!'
-                    image_id="$(docker images -q cloud-hub:0.0)"
-                      if [[ "$(docker images -q cloud-hub:0.0 2> /dev/null)" == "$image_id" ]]; then
+		              echo 'Hello, YI-TFLOW!!'
+                    image_id="$(docker images -q gm-tf-3.6:0.0)"
+                      if [[ "$(docker images -q gm-tf-3.6:0.0 2> /dev/null)" == "$image_id" ]]; then
                           docker inspect --format='{{range $p, $conf := .RootFS.Layers}} {{$p}} {{end}}' $image_id
                       else
                           echo "It appears that current docker image corrapted!!!"
@@ -20,26 +20,7 @@ pipeline {
                    ''' 
             }
         }
-        stage('Build The gm-tf-2.7:0.0  Docker Image ') {
-            steps {
-	       sh 'docker build -f Dockerfile.GM-tf-2.7 -t gm-tf-2.7:0.0 .'  
-            }
-        }
-	stage('Test The gm-tf-2.7:0.0 Docker Image') { 
-            steps {
-                sh '''#!/bin/bash -xe
-		   echo 'Hello, Jenkins_Docker'
-                    image_id="$(docker images -q gm-tf-2.7:0.0)"
-                      if [[ "$(docker images -q gm-tf-2.7:0.0 2> /dev/null)" == "$image_id" ]]; then
-                          docker inspect --format='{{range $p, $conf := .RootFS.Layers}} {{$p}} {{end}}' $image_id
-                      else
-                          echo "It appears that current docker image corrapted!!!"
-                          exit 1
-                      fi 
-                   ''' 
-		    }
-		}
- }
+    }
 	post {
             always {
                script {
