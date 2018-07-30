@@ -15,6 +15,8 @@ Where: -d - >> run docker image detached, othervise use -it (will not work with 
 ### Enter to the docker image:
 `docker-enter tflow_build`
 `docker exec -it tflow_build /bin/bash`
+## In order to run shell commands after using docker-enter method, please run following command:
+`export TERM=xterm`
 ### Running application inside docker container:
 `docker exec -it tflow_build python /gpu_tf_check.py`
 `docker exec -it tflow_build python -c "import tensorflow; print(tensorflow.__version__)" > tflow.txt`
