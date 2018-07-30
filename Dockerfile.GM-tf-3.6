@@ -60,10 +60,7 @@ RUN add-apt-repository ppa:jonathonf/python-3.6 && \
     apt-get update && apt-get install -y --no-install-recommends \
     python3.6 \
     python3.6-dev \
-    python3.6-venv \
-    && \ 
-    apt-get clean && \ 
-    rm -rf /var/lib/apt/lists/*
+    python3.6-venv 
 	
 RUN ln -s /usr/bin/python3.6 /usr/local/bin/python3 && \
     ln -s /usr/local/bin/pip /usr/local/bin/pip3 && \
