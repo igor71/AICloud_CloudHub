@@ -1,17 +1,18 @@
 pipeline {
   agent {label 'gm-cloud-hub'}
     stages {
-        stage('Build cloud-hub:0.0 Docker Image') {
+        stage('Build Docker Image') {
             steps {
-	       sh 'docker build -f Dockerfile.CloudHub -t cloud-hub:0.0 .'  
+	       sh '''#!/bin/bash -xe
+	       		docker build -f Dockerfile.CloudHub -t cloud-hub:${docker_tag} .
+		   '''  
             }
         }
-	stage('Test The cloud-hub:0.0 Docker Image') { 
+	    stage('Test Docker Image') { 
             steps {
                 sh '''#!/bin/bash -xe
-		    echo 'Hello, YI-TFLOW!!'
-                    image_id="$(docker images -q cloud-hub:0.0)"
-                      if [[ "$(docker images -q cloud-hub:0.0 2> /dev/null)" == "$image_id" ]]; then
+                    image_id="$(docker images -q cloud-hub:${docker_tag})"
+                      if [[ "$(docker images -q cloud-hub:${docker_tag} 2> /dev/null)" == "$image_id" ]]; then
                           docker inspect --format='{{range $p, $conf := .RootFS.Layers}} {{$p}} {{end}}' $image_id
                       else
                           echo "It appears that current docker image corrapted!!!"
@@ -20,26 +21,26 @@ pipeline {
                    ''' 
             }
         }
-        stage('Build The gm-tf-2.7:0.0  Docker Image ') {
-            steps {
-	       sh 'docker build -f Dockerfile.GM-tf-2.7 -t gm-tf-2.7:0.0 .'  
-            }
-        }
-	stage('Test The gm-tf-2.7:0.0 Docker Image') { 
+		stage('Save & Load Docker Image') { 
             steps {
                 sh '''#!/bin/bash -xe
-		   echo 'Hello, Jenkins_Docker'
-                    image_id="$(docker images -q gm-tf-2.7:0.0)"
-                      if [[ "$(docker images -q gm-tf-2.7:0.0 2> /dev/null)" == "$image_id" ]]; then
-                          docker inspect --format='{{range $p, $conf := .RootFS.Layers}} {{$p}} {{end}}' $image_id
-                      else
-                          echo "It appears that current docker image corrapted!!!"
-                          exit 1
-                      fi 
+		                echo 'Saving Docker image into tar archive'
+                        docker save cloud-hub:${docker_tag} | pv | cat > $WORKSPACE/cloud-hub_${docker_tag}.tar
+                        
+						echo 'Remove Original Docker Image' 
+						CURRENT_ID=$(docker images | grep cloud-hub | grep ${docker_tag} | awk '{print $3}')
+						docker rmi -f cloud-hub:${docker_tag}
+                        
+                        echo 'Loading Docker Image'
+                        pv $WORKSPACE/cloud-hub_${docker_tag}.tar | docker load
+						docker tag ${CURRENT_ID} cloud-hub:${docker_tag} 
+                        
+                        echo 'Removing temp archive.'  
+                        rm $WORKSPACE/cloud-hub_${docker_tag}.tar
                    ''' 
 		    }
 		}
- }
+    }
 	post {
             always {
                script {
