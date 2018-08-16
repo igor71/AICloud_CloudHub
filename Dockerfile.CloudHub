@@ -84,6 +84,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
     libncurses5:i386 \
     libstdc++6:i386 \
     file \
+    netbase \
     gcc-multilib && \
     rm -rf /var/lib/apt/lists/*
 
@@ -105,7 +106,7 @@ RUN pip --no-cache-dir install \
     redis==2.10.6 \
     pymongo==3.4.0 \
     APScheduler==3.3.1 \
-    opencv_python==3.3.0.10  \
+    opencv_python==3.4.2.17  \
     socketIO_client==0.7.2 \
     requests==2.18.4 \
     Werkzeug==0.12.2 \
@@ -115,6 +116,7 @@ RUN pip --no-cache-dir install \
     simplejson==3.13.2 \
     numpy==1.14.5 \
     eventlet==0.23.0 \
+    pycryptodome==3.6.4 \
     && \
     python -m ipykernel.kernelspec
 
@@ -185,6 +187,14 @@ RUN echo '[ ! -z "$TERM" -a -r /etc/motd ] && cat /etc/issue && cat /etc/motd' \
 EXPOSE 22
 
 
+#######################
+# Cloning application #
+#######################
+
+RUN git clone https://yi-israel:Xuna7421@bitbucket.org/yi-israel/aicloud_cloudhub.git
+
+
+
 #####################
 # Default command   #
 #####################
@@ -192,4 +202,3 @@ EXPOSE 22
 ENTRYPOINT ["/tini", "--"]
 CMD ["/usr/sbin/sshd", "-D"]
 RUN ["/bin/bash"]
-
