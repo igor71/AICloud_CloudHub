@@ -24,16 +24,16 @@ pipeline {
 		stage('Save & Load Docker Image') { 
             steps {
                 sh '''#!/bin/bash -xe
-		                echo 'Saving Docker image into tar archive'
+		        echo 'Saving Docker image into tar archive'
                         docker save cloud-hub:${docker_tag} | pv | cat > $WORKSPACE/cloud-hub_${docker_tag}.tar
                         
-						echo 'Remove Original Docker Image' 
-						CURRENT_ID=$(docker images | grep cloud-hub | grep ${docker_tag} | awk '{print $3}')
-						docker rmi -f cloud-hub:${docker_tag}
+			echo 'Remove Original Docker Image' 
+		        CURRENT_ID=$(docker images | grep cloud-hub | grep ${docker_tag} | awk '{print $3}')
+		        docker rmi -f cloud-hub:${docker_tag}
                         
                         echo 'Loading Docker Image'
                         pv $WORKSPACE/cloud-hub_${docker_tag}.tar | docker load
-						docker tag ${CURRENT_ID} cloud-hub:${docker_tag} 
+			docker tag ${CURRENT_ID} cloud-hub:${docker_tag} 
                         
                         echo 'Removing temp archive.'  
                         rm $WORKSPACE/cloud-hub_${docker_tag}.tar
