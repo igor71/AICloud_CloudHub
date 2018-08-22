@@ -1,7 +1,7 @@
 pipeline {
   agent {label 'gm-cloud-hub'}
     stages {
-        stage('Build Docker Image') {
+       stage('Build Docker Image') {
             steps {
 	       sh '''#!/bin/bash -xe
 	       		docker build -f Dockerfile.CloudHub -t cloud-hub:${docker_tag} .
